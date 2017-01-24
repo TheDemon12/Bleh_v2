@@ -112,6 +112,7 @@ def common_vars(bot, update):
     return chat_idstr, chat_id, fromid, fromidstr
 
 def loadjson(PATH, filename):
+    print("Accessing json file :"+PATH)
     if not os.path.isfile(PATH) or not os.access(PATH, os.R_OK):
         print ("Either file is missing or is not readable. Creating.")
         name = {}
@@ -265,6 +266,9 @@ def add(bot, update):
                     moderated[chat_idstr] = chat_id
                     bot.sendMessage(chat_id=update.message.chat_id,
                                     text=update.message.chat.title + " added to my records!")
+# Coded by Abhiram, this might be a bit how you are doing please excuse me!
+                    with open("moderated.json", 'w') as f:
+                        json.dump(moderated, f)
                     return
                 else:
                     bot.sendMessage(chat_id=update.message.chat_id,
@@ -364,11 +368,13 @@ def receiveMessage(bot, update):
     global locked
     global welcome
     idbase = loadjson('./idbase.json', "idbase.json")
-
+#    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
         tguser = str(update.message.from_user.username).lower()
         tgid = str(update.message.from_user.id)
         chat_idstr = str(update.message.chat_id)
+#       print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
+        print()
         chat_id = update.message.chat_id
         chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
 
@@ -468,6 +474,7 @@ def receiveMessage(bot, update):
                                             message_id=messageid)
 
 def receiveLocked(bot, update):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     idbase = loadjson('./idbase.json', "idbase.json")
     tguser = str(update.message.from_user.username).lower()
     if update.message.chat.type != "private":
