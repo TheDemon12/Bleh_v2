@@ -1965,7 +1965,7 @@ def idme(bot, update, args):
 
 def runbruhh(bot, update):
     notsofast(bot, update).start()
-def runfastbruh(bot, update):
+def runfast(bot, update):
     fast(bot,update).start()
 
 def button(bot, update, direct=True):
