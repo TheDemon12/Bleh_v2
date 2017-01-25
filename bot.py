@@ -347,7 +347,7 @@ def leavecheck(bot, update):
 
 
 class notsofast(Thread):
-    
+
     def __init__(self, bot, update):
         self.bot = bot
         self.update = update
@@ -357,6 +357,18 @@ class notsofast(Thread):
         update = self.update
         bot = self.bot
         update.message.reply_text("not so fast...")
+class prettyfast(Thread):
+
+    def __init__(self, bot, update):
+        self.bot = bot
+        self.update = update
+        Thread.__init__(self)
+    def run(self):
+        time.sleep(1.5)
+        update = self.update
+        bot = self.bot
+        update.message.reply_text("wanna ban?")
+
 
 def receiveMessage(bot, update):
     global idbase
@@ -1953,6 +1965,8 @@ def idme(bot, update, args):
 
 def runbruhh(bot, update):
     notsofast(bot, update).start()
+def catwalk(bot, update):
+    prettyfast(bot,update).start()
 
 def button(bot, update, direct=True):
         global welcome
@@ -2030,6 +2044,7 @@ gbanlist_handler = CommandHandler('gbanlist', getglobalbanlist)
 resetwarn_handler = CommandHandler('reset', resetwarn, pass_args=True)
 welcome_handler = CommandHandler('welcome', welcomeme, pass_args=True)
 run_handler = CommandHandler('runs', runbruhh)
+catwalk_handler = CommandHandler('catwalk', runfast)
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(help_handler)
