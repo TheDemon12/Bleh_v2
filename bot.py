@@ -357,7 +357,7 @@ class notsofast(Thread):
         update = self.update
         bot = self.bot
         update.message.reply_text("not so fast...")
-class fast(Thread):
+class dies(Thread):
 
     def __init__(self, bot, update):
         self.bot = bot
