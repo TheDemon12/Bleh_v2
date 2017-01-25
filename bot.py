@@ -50,6 +50,7 @@ note_d_help = "-- /note unlock <code>notename</code> to unlock a note  - <b>admi
 note_e_help = "-- /note clear <code>notename</code> to clear a note  - <b>admins only</b>\n"
 note_f_help = "-- /note clearall to clear all normal notes  - <b>admins only</b>\n"
 note_g_help = "-- /note clearlock to clear all locked notes  - <b>admins only</b>\n"
+own_help = "Owner @ATTITUDE_IDGAF <b>Improved by </b>@AbhiramShibu\n" 
 kick_help = "/kick @username to kick a user from this chat. They will not be able to join unless added\n"
 ban_help = "/ban @username to ban a user from this chat. They will not be able to join unless unbanned\n"
 unban_help = "/unban @username to unban a user from this chat. They can join, but will not automatically be added\n"
@@ -71,7 +72,7 @@ gbanlist_help = "\n/gbanlist to get a list of users banned from all my chats\n"
 banlist_help = "\n/banlist to get a list of users banned from this chat\n"
 setrules_help = "\n/setrules <code>rules</code> to set the rules for this chat\n"
 rules_help = "/rules to get the rules for this chat\n"
-standardhelp = add_help + rem_help + promote_help + demote_help + modlist_help + kick_help + ban_help + unban_help + banall_help + unbanall_help + banlist_help + gbanlist_help + lock_help + unlock_help + setflood_help + settings_help + note_a_help + note_b_help + note_c_help + note_d_help + note_e_help + note_f_help + note_g_help + time_help + save_help + get_help + save_from_help + setrules_help + rules_help
+standardhelp = add_help + rem_help + promote_help + demote_help + modlist_help + kick_help + ban_help + unban_help + banall_help + unbanall_help + banlist_help + gbanlist_help + lock_help + unlock_help + setflood_help + settings_help + note_a_help + note_b_help + note_c_help + note_d_help + note_e_help + note_f_help + note_g_help + time_help + save_help + get_help + save_from_help + setrules_help + rules_help + own_help
 notmaster = "Sup <b>not</b> master. \n"
 master = "Sup" + myusername + "\n"
 # global functions
@@ -140,7 +141,7 @@ def owner_admin_mod_check(bot, chat_id, chat_idstr, user_id):
         else:
             return "false"
 def owner_check(bot, chat_id, user_id):
-    if user_id == int(config['ADMIN']['id']):
+    if str(user_id) in " ".join(config['ADMIN']['id'].split(",")):
         return "true"
     else:
         return "false"
@@ -198,7 +199,7 @@ def help_message(bot, update, args):
         else:
             if args[0] in masterlist:
                 if args[0] == "note":
-                    helpme = note_a_help + note_b_help + note_c_help + note_d_help + note_e_help + note_f_help + note_g_help
+                    helpme = note_a_help + note_b_help + note_c_help + note_d_help + note_e_help + note_f_help + note_g_help + own_help
                 if args[0] == "ban":
                     helpme = ban_help
                 if args[0] == "unban":
@@ -288,7 +289,7 @@ def rem(bot, update):
     global moderated
     chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
     if update.message.chat.type != "private":
-        if get_user_info(bot, chat_id, fromid, "", "status") == "creator" or owner_check(bot, chat_id, fromid) == "true":
+        if owner_check(bot, chat_id, fromid) == "true":
             if bot.id in get_admin_ids(bot, update.message.chat_id):
                 moderated = loadjson('./moderated.json', "moderated.json")
                 if chat_idstr in moderated.keys():
@@ -305,7 +306,7 @@ def rem(bot, update):
                                 text="I need to be an admin to moderate groups!")
         else:
             bot.sendMessage(chat_id=update.message.chat_id,
-                            text="Umm, pretty sure the creator of this group should tell me whether to leave or not.")
+                            text="Umm, pretty sure the admin of this bot should tell me whether to leave or not.")
     else:
         bot.sendMessage(chat_id=update.message.chat_id,
                         text="I only work with groups! Sorry pal")
