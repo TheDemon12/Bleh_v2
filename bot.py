@@ -357,7 +357,7 @@ class notsofast(Thread):
         update = self.update
         bot = self.bot
         update.message.reply_text("not so fast...")
-class prettyfast(Thread):
+class fast(Thread):
 
     def __init__(self, bot, update):
         self.bot = bot
@@ -367,7 +367,7 @@ class prettyfast(Thread):
         time.sleep(1.5)
         update = self.update
         bot = self.bot
-        update.message.reply_text("wanna ban?")
+        update.message.reply_text("wanna ban bro?")
 
 
 def receiveMessage(bot, update):
@@ -1965,8 +1965,8 @@ def idme(bot, update, args):
 
 def runbruhh(bot, update):
     notsofast(bot, update).start()
-def catwalk(bot, update):
-    prettyfast(bot,update).start()
+def runfastbruh(bot, update):
+    fast(bot,update).start()
 
 def button(bot, update, direct=True):
         global welcome
