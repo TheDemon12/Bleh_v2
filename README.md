@@ -13,4 +13,4 @@ Install needed dependencies using pip3
 
 ```
 
-Then run the bot with `python3 bot.py`.
+Then run the bot with <code>./bot.py</code>
