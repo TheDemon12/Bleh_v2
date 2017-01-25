@@ -363,11 +363,11 @@ class fast(Thread):
         self.bot = bot
         self.update = update
         Thread.__init__(self)
-    def run(self):
+    def die(self):
         time.sleep(1.5)
         update = self.update
         bot = self.bot
-        update.message.reply_text("wanna ban bro?")
+        update.message.reply_text("RIP...")
 
 
 def receiveMessage(bot, update):
@@ -1965,8 +1965,8 @@ def idme(bot, update, args):
 
 def runbruhh(bot, update):
     notsofast(bot, update).start()
-def runfast(bot, update):
-    fast(bot,update).start()
+def diebruhh(bot, update):
+    dies(bot, update).start()
 
 def button(bot, update, direct=True):
         global welcome
@@ -2044,7 +2044,7 @@ gbanlist_handler = CommandHandler('gbanlist', getglobalbanlist)
 resetwarn_handler = CommandHandler('reset', resetwarn, pass_args=True)
 welcome_handler = CommandHandler('welcome', welcomeme, pass_args=True)
 run_handler = CommandHandler('runs', runbruhh)
-catwalk_handler = CommandHandler('catwalk', runfast)
+die_handler = CommandHandler('die', diebruhh)
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(help_handler)
@@ -2077,6 +2077,7 @@ dispatcher.add_handler(gbanlist_handler)
 dispatcher.add_handler(resetwarn_handler)
 dispatcher.add_handler(welcome_handler)
 dispatcher.add_handler(run_handler)
+dispatcher.add_handler(die_handler)
 
 
 dispatcher.add_handler(MessageHandler([Filters.all], receiveMessage))
