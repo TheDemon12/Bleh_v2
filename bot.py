@@ -128,8 +128,9 @@ def dumpjson(filename, var):
 
 def owner_admin_mod_check(bot, chat_id, chat_idstr, user_id):
     promoted = loadjson('./promoted.json', "promoted.json")
+    print("List of admins :"+",".join(config['ADMIN']['id'].split(",")))
     if chat_idstr in promoted:
-        if user_id in get_admin_ids(bot, chat_id) or str(user_id) in promoted[chat_idstr] or user_id == int(config['ADMIN']['id']):
+        if (user_id in get_admin_ids(bot, chat_id)) or (str(user_id) in promoted[chat_idstr]) or (str(user_id) in " ".join(config['ADMIN']['id'].split(","))):
             return "true"
         else:
             return "false"
@@ -1103,7 +1104,7 @@ def kick_user(bot, update, args):
                                             text="User @" + banuser + " removed from " + update.message.chat.title + " :(")
                         else:
                             bot.sendMessage(chat_id=update.message.chat_id,
-                                            text="You can't kick mods! &$%^# ")
+                                            text="You can't kick mods or admins! &$%^# ")
                 else:
                     bot.sendMessage(chat_id=update.message.chat_id,
                                     text="You can kick someone with /kick @username")
