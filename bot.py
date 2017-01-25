@@ -364,11 +364,9 @@ class dies(Thread):
         self.update = update
         Thread.__init__(self)
     def die(self):
-        time.sleep(1.5)
         update = self.update
         bot = self.bot
         update.message.reply_text("RIP...")
-
 
 def receiveMessage(bot, update):
     global idbase
@@ -1966,7 +1964,7 @@ def idme(bot, update, args):
 def runbruhh(bot, update):
     notsofast(bot, update).start()
 def diebruhh(bot, update):
-    dies(bot, update).start()
+    dies(bot, update).die()
 
 def button(bot, update, direct=True):
         global welcome
