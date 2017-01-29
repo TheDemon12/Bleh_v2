@@ -33,7 +33,7 @@ def __repr__(self):
     return str(self)
 
 config = configparser.ConfigParser()
-config.read('bot.ini')
+config.read('bot.cfg')
 
 updater = Updater(token=config['KEYS']['bot_api'])
 myusername = config['ADMIN']['username']
@@ -113,7 +113,7 @@ def common_vars(bot, update):
     return chat_idstr, chat_id, fromid, fromidstr
 
 def loadjson(PATH, filename):
-    print("Accessing json file :"+PATH)
+#    print("Accessing json file :"+PATH)
     if not os.path.isfile(PATH) or not os.access(PATH, os.R_OK):
         print ("Either file is missing or is not readable. Creating.")
         name = {}
@@ -174,6 +174,7 @@ def getRandomBoobs(attempt):
 # start and help come first
 
 def start(bot, update):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type == "private":
 
         bot.sendChatAction(chat_id=update.message.chat_id,
@@ -188,6 +189,7 @@ def start(bot, update):
                             parse_mode="HTML")
 
 def help_message(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     standardlist = ["save", "get", "time", "ban", "unban", "kick", "note", "banall", "unbanall", "add", "rem", "promote", "demote", "modlist", "lock", "unlock", "setflood", "settings", "setrules", "rules", "gbanlist", "banlist"]
 
     args_length = len(args)
@@ -258,10 +260,11 @@ def help_message(bot, update, args):
 
 # real stuff
 def add(bot, update):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     global moderated
     chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
     if update.message.chat.type != "private":
-        if fromid in get_admin_ids(bot, update.message.chat_id):
+        if owner_check(bot, chat_id, fromid) == "true":
             if bot.id in get_admin_ids(bot, update.message.chat_id):
                 moderated = loadjson('./moderated.json', "moderated.json")
                 if chat_idstr not in moderated.keys():
@@ -278,7 +281,7 @@ def add(bot, update):
                 bot.sendMessage(chat_id=update.message.chat_id,
                                 text="I need to be an admin to moderate groups!")
         else:
-            bot.sendMessage(chat_id=update.message.chat_id,
+           bot.sendMessage(chat_id=update.message.chat_id,
                             text="You gotta be an admin to tell me what to do!")
     else:
         bot.sendMessage(chat_id=update.message.chat_id,
@@ -286,6 +289,7 @@ def add(bot, update):
 
 
 def rem(bot, update):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     global moderated
     chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
     if update.message.chat.type != "private":
@@ -365,7 +369,7 @@ def receiveMessage(bot, update):
     global locked
     global welcome
     idbase = loadjson('./idbase.json', "idbase.json")
-#    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
         tguser = str(update.message.from_user.username).lower()
         tgid = str(update.message.from_user.id)
@@ -471,7 +475,7 @@ def receiveMessage(bot, update):
                                             message_id=messageid)
 
 def receiveLocked(bot, update):
-    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
+#    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     idbase = loadjson('./idbase.json', "idbase.json")
     tguser = str(update.message.from_user.username).lower()
     if update.message.chat.type != "private":
@@ -620,6 +624,7 @@ def floodcheck(bot, update):
                 dumpjson("flooding.json", flooding)
 
 def modlist(bot, update):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
         if bot.id in get_admin_ids(bot, update.message.chat_id):
             chat_idstr = str(update.message.chat_id)
@@ -696,6 +701,7 @@ def getglobalbanlist(bot, update):
             bot.sendMessage(chat_id=update.message.chat_id,
                             text="I'm not an admin! Please make me one, otherwise I can't do anything!")
 def getbanlist(bot, update):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
 
         if bot.id in get_admin_ids(bot, update.message.chat_id):
@@ -861,6 +867,7 @@ def demoteme(bot, update, args):
                         text="You can only demote someone in groups")
 
 def unbanme(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
 
         if bot.id in get_admin_ids(bot, update.message.chat_id):
@@ -914,6 +921,7 @@ def unbanme(bot, update, args):
                             text="I'm not an admin! Please make me one, otherwise I can't do anything!")
 
 def unbanall(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
 
         if bot.id in get_admin_ids(bot, update.message.chat_id):
@@ -970,6 +978,7 @@ def unbanall(bot, update, args):
                             text="I'm not an admin! Please make me one, otherwise I can't do anything!")
 
 def banall(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
 
         if bot.id in get_admin_ids(bot, update.message.chat_id):
@@ -1023,6 +1032,7 @@ def banall(bot, update, args):
 
 
 def banme(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
         if bot.id in get_admin_ids(bot, update.message.chat_id):
             chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
@@ -1077,6 +1087,7 @@ def banme(bot, update, args):
 
 
 def kick_user(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if bot.id in get_admin_ids(bot, update.message.chat_id):
         chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
         moderated = loadjson('./moderated.json', "moderated.json")
@@ -1119,6 +1130,7 @@ def kick_user(bot, update, args):
                         text="I'm not an admin! Please make me one, otherwise I can't do anything!")
 
 def note(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     global notes
     notes = loadjson('./notes.json', "notes.json")
     chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
@@ -1323,6 +1335,7 @@ def note(bot, update, args):
     dumpjson("notes.json", notes)
 
 def time_command(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     str_args = ' '.join(args)
     latitude, longitude = latlong(str_args)
     timestamp = time.time()
@@ -1350,6 +1363,7 @@ def time_command(bot, update, args):
     return(dt_time)
 
 def save_message(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     global saved
     saved = loadjson('./saved.json', "saved.json")
     chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
@@ -1412,6 +1426,7 @@ def save_message(bot, update, args):
                         text="Only for mods bruh")
 
 def get_message(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     global saved
     saved = loadjson('./saved.json', "saved.json")
     chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
@@ -1445,6 +1460,7 @@ def get_message(bot, update, args):
                         parse_mode="HTML")
 
 def lockme(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
 
         if bot.id in get_admin_ids(bot, update.message.chat_id):
@@ -1540,6 +1556,7 @@ def fixlocked(bot, update):
                     dumpjson("locked.json", locked)
 
 def unlockme(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
 
         if bot.id in get_admin_ids(bot, update.message.chat_id):
@@ -1609,6 +1626,7 @@ def unlockme(bot, update, args):
                         text="Unlocking settings is for groups!")
 
 def setflood(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     if update.message.chat.type != "private":
 
         if bot.id in get_admin_ids(bot, update.message.chat_id):
@@ -1799,6 +1817,7 @@ def rules_get(bot, update):
         bot.sendMessage(chat_id=update.message.chat_id,
                         text="No rules for private chat!")
 def setrules(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     global rules
     moderated = loadjson('./moderated.json', "moderated.json")
     if update.message.chat.type != "private":
@@ -1877,6 +1896,7 @@ def settings(bot, update):
                         parse_mode="HTML")
 
 def welcomeme(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     global welcome
     welcome = loadjson('./welcome.json', "welcome.json")
     moderated = loadjson('./moderated.json', "moderated.json")
@@ -1925,6 +1945,7 @@ def welcomeme(bot, update, args):
                         text="Nope. Not welcoming you.")
 
 def idme(bot, update, args):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     idbase = loadjson('./idbase.json', "idbase.json")
 
     str_args = ' '.join(args)
@@ -1951,8 +1972,10 @@ def idme(bot, update, args):
                                 text="The ID of " + update.message.chat.title + " is " + chat_idstr)
 
 def runbruhh(bot, update):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     notsofast(bot, update).start()
 def diebruhh(bot, update):
+    print("Incomming message from "+update.message.from_user.username+", message :"+update.message.text)
     chat_idstr, chat_id, fromid, fromidstr = common_vars(bot, update)
     if owner_check(bot, chat_id, fromid) == "true": 
          update.message.reply_text("Bye.. Im DEAD!")
